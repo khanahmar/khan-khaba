@@ -1,4 +1,3 @@
-// Capturing id's
 const display = document.getElementById("display");
 
 // Import the functions you need from the SDKs you need
@@ -7,6 +6,7 @@ import {
   getFirestore,
   collection,
   getDocs,
+  addDoc,
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -27,27 +27,39 @@ const db = getFirestore(app);
 
 // Read  Data
 const querySnapshot = await getDocs(collection(db, "menu"));
+console.log(querySnapshot);
+let i = 1;
 querySnapshot.forEach((doc) => {
-  // console.log(`${doc.id} => ${doc.data()}`);
-
-  display.innerHTML += ` 
-  <div class="col-md-3">
-  <div id="card" class="card mt-3 card-set">
-    <img
-      src=${doc.data().img}
-      class="card-img-top"
-      alt="..."
-    />
-    <div class="card-body">
-      <h5 class="card-title">${doc.data().title}</h5>
-      <p class="card-text">${doc.data().desc}</p>
-    </div>
-    <div class="card-footer d-grid">
-      <a href="#" class="btn btn-set">Add <span class="float-end">Rs.${
-        doc.data().price
-      }</span></a>
-    </div>
-  </div>
-</div>
+  display.innerHTML += `  <tr>
+  <th scope="row">${i++}</th>
+  <td>${doc.data().img}</td>
+  <td>${doc.data().title}</td>
+  <td>${doc.data().desc}</td>
+  <td>${doc.data().price}</td>
+</tr>
 `;
+});
+
+const form = document.getElementById("form");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const imgUrl = document.getElementById("img-url").value;
+  const title = document.getElementById("title").value;
+  const desc = document.getElementById("desc").value;
+  const price = document.getElementById("price").value;
+
+  const pizza = {
+    imgUrl,
+    title,
+    desc,
+    price,
+  };
+  console.log(pizza);
+  try {
+    const docRef = await addDoc(collection(db, "menu"), pizza);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
 });
