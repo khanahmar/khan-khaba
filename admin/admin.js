@@ -9,6 +9,8 @@ import {
   addDoc,
   doc,
   deleteDoc,
+  onSnapshot,
+  query,
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -27,33 +29,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Read  Data
-const querySnapshot = await getDocs(collection(db, "menu"));
+// Get  Data
 
-let i = 1;
-querySnapshot.forEach((doc) => {
-  display.innerHTML += `  <tr>
-  <th scope="row">${i++}</th>
-  <td>${doc.data().img}</td>
-  <td>${doc.data().title}</td>
-  <td>${doc.data().desc}</td>
-  <td>${doc.data().price}</td>
-  <td><button  class="btn btn-danger">Delete</button></td>
-</tr>
-`;
+const q = query(collection(db, "menu"));
+onSnapshot(q, (querySnapshot) => {
+  let i = 1;
+  querySnapshot.forEach((doc) => {
+    console.log(doc);
+    if (change.type === "added") {
+      addingData();
+    }
+    if (change.type === "modified") {
+      console.log("Modified city: ", change.doc.data());
+    }
+    if (change.type === "removed") {
+      console.log("Removed city: ", change.doc.data());
+    }
+  });
 });
-
 const form = document.getElementById("form");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const imgUrl = document.getElementById("img-url").value;
+  const img = document.getElementById("img-url").value;
   const title = document.getElementById("title").value;
   const desc = document.getElementById("desc").value;
   const price = document.getElementById("price").value;
 
   const pizza = {
-    imgUrl,
+    img,
     title,
     desc,
     price,
@@ -68,6 +72,30 @@ form.addEventListener("submit", async (e) => {
 });
 
 const deleteItem = async (id) => {
-  let itmDelt = await deleteDoc(doc(db, "menu", id));
-  console.log(itmDelt);
+  await deleteDoc(doc(db, "menu", id));
 };
+
+display.addEventListener("click", (e) => {
+  const delId = e.target.getAttribute("data-delid");
+  console.log(
+    "🚀 ~ file: admin.js ~ line 77 ~ display.addEventListener ~ delId",
+    delId
+  );
+
+  if (delId) {
+    deleteItem(delId);
+  }
+});
+
+// Adding data
+function addingData() {
+  display.innerHTML += `  <tr>
+  <th scope="row">${i++}</th>
+  <td>${doc.data().img}</td>
+  <td>${doc.data().title}</td>
+  <td>${doc.data().desc}</td>
+  <td>${doc.data().price}</td>
+  <td><button data-delid="${doc.id}" class="btn btn-danger">Delete</button></td>
+</tr>
+`;
+}

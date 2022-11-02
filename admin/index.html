@@ -78,74 +78,56 @@
             </li>
           </ul>
 
-          <!-- Button trigger modal -->
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#addPizzaModal"
-          >
-            Add Pizza
-          </button>
+          <!-- Log out button -->
+          <button type="button" class="btn btn-primary">Log out</button>
         </div>
       </div>
     </nav>
     <!-- navbar end -->
-    <!-- Add Pizza Modal starts -->
-    <div
-      class="modal fade"
-      id="addPizzaModal"
-      tabindex="-1"
-      aria-labelledby="addPizzaModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="addPizzaModalLabel">Add Pizza</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <!-- form starts -->
-            <form id="form">
-              <div class="mb-3">
-                <label for="img-url" class="form-label">img url</label>
-                <input type="text" class="form-control" id="img-url" />
-              </div>
-              <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" />
-              </div>
-              <div class="mb-3">
-                <label for="desc" class="form-label">Desc</label>
-                <input type="text" class="form-control" id="desc" />
-              </div>
-              <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" id="price" />
-              </div>
 
-              <button
-                type="submit"
-                data-bs-dismiss="modal"
-                class="btn btn-primary"
-                id="add-pizza"
-              >
-                Add
-              </button>
-            </form>
-            <!-- form ends -->
+    <main class="container m-5 p-5">
+      <!-- Form starts -->
+      <form id="form">
+        <div class="row">
+          <div class="col">
+            <input
+              id="img-url"
+              type="text"
+              class="form-control"
+              placeholder="Image"
+            />
+          </div>
+          <div class="col">
+            <input
+              id="title"
+              type="text"
+              class="form-control"
+              placeholder="Title"
+            />
+          </div>
+          <div class="col">
+            <input
+              id="desc"
+              type="text"
+              class="form-control"
+              placeholder="Description"
+            />
+          </div>
+          <div class="col">
+            <input
+              id="price"
+              type="text"
+              class="form-control"
+              placeholder="Price"
+            />
+          </div>
+          <div class="col">
+            <button type="submit" class="btn btn-primary">Add pizza</button>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- container starts -->
-    <main class="container m-5 p-5">
+      </form>
+      <!-- form ends -->
+
       <table class="table">
         <thead>
           <tr>
