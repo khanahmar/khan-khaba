@@ -33,7 +33,7 @@ const db = getFirestore(app);
 
 const q = query(collection(db, "menu"));
 onSnapshot(q, (querySnapshot) => {
-  let i = 1;
+  // let i = 1;
   querySnapshot.forEach((doc) => {
     console.log(doc);
     if (change.type === "added") {
@@ -77,10 +77,6 @@ const deleteItem = async (id) => {
 
 display.addEventListener("click", (e) => {
   const delId = e.target.getAttribute("data-delid");
-  console.log(
-    "🚀 ~ file: admin.js ~ line 77 ~ display.addEventListener ~ delId",
-    delId
-  );
 
   if (delId) {
     deleteItem(delId);
@@ -99,3 +95,5 @@ function addingData(doc) {
 </tr>
 `);
 }
+
+function updateData() {}
