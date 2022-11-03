@@ -43,7 +43,7 @@ onSnapshot(q, (querySnapshot) => {
       console.log("Modified city: ", change.doc.data());
     }
     if (change.type === "removed") {
-      console.log("Removed city: ", change.doc.data());
+      deleteItem(doc.id);
     }
   });
 });
@@ -88,8 +88,8 @@ display.addEventListener("click", (e) => {
 });
 
 // Adding data
-function addingData() {
-  display.innerHTML += `  <tr>
+function addingData(doc) {
+  return (display.innerHTML += `  <tr>
   <th scope="row">${i++}</th>
   <td>${doc.data().img}</td>
   <td>${doc.data().title}</td>
@@ -97,5 +97,5 @@ function addingData() {
   <td>${doc.data().price}</td>
   <td><button data-delid="${doc.id}" class="btn btn-danger">Delete</button></td>
 </tr>
-`;
+`);
 }
