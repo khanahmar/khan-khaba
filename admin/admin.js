@@ -32,10 +32,8 @@ const db = getFirestore(app);
 // Get  Data
 
 const q = query(collection(db, "menu"));
-onSnapshot(q, (querySnapshot) => {
-  // let i = 1;
-  querySnapshot.forEach((doc) => {
-    console.log(doc);
+const unsubscribe = onSnapshot(q, (snapshot) => {
+  snapshot.docChanges().forEach((change) => {
     if (change.type === "added") {
       addingData();
     }
@@ -43,10 +41,11 @@ onSnapshot(q, (querySnapshot) => {
       console.log("Modified city: ", change.doc.data());
     }
     if (change.type === "removed") {
-      deleteItem(doc.id);
+      console.log("Removed city: ", change.doc.data());
     }
   });
 });
+
 const form = document.getElementById("form");
 
 form.addEventListener("submit", async (e) => {
@@ -84,16 +83,19 @@ display.addEventListener("click", (e) => {
 });
 
 // Adding data
-function addingData(doc) {
-  return (display.innerHTML += `  <tr>
-  <th scope="row">${i++}</th>
-  <td>${doc.data().img}</td>
-  <td>${doc.data().title}</td>
-  <td>${doc.data().desc}</td>
-  <td>${doc.data().price}</td>
-  <td><button data-delid="${doc.id}" class="btn btn-danger">Delete</button></td>
-</tr>
-`);
-}
-
-function updateData() {}
+const addingData = async (doc) => {
+  const querySnapshot = await getDocs(collection(db, "menu"));
+  querySnapshot.forEach((doc) => {
+    display.innerHTML += `  <tr>
+    <th scope="row">${i++}</th>
+    <td>${doc.data().img}</td>
+    <td>${doc.data().title}</td>
+    <td>${doc.data().desc}</td>
+    <td>${doc.data().price}</td>
+    <td><button data-delid="${
+      doc.id
+    }" class="btn btn-danger">Delete</button></td>
+  </tr>
+  `;
+  });
+};
