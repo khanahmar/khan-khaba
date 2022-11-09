@@ -1,5 +1,4 @@
 const display = document.getElementById("display");
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import {
@@ -32,16 +31,15 @@ const db = getFirestore(app);
 // Get  Data
 
 const q = query(collection(db, "menu"));
-const unsubscribe = onSnapshot(q, (snapshot) => {
+console.log(q);
+onSnapshot(q, (snapshot) => {
   snapshot.docChanges().forEach((change) => {
     if (change.type === "added") {
-      addingData();
-    }
-    if (change.type === "modified") {
+      displayData(change.doc);
+    } else if (change.type === "modified") {
       console.log("Modified city: ", change.doc.data());
-    }
-    if (change.type === "removed") {
-      console.log("Removed city: ", change.doc.data());
+    } else if (change.type === "removed") {
+      displayData(change.doc);
     }
   });
 });
@@ -68,6 +66,7 @@ form.addEventListener("submit", async (e) => {
   } catch (e) {
     console.error("Error adding document: ", e);
   }
+  form.reset();
 });
 
 const deleteItem = async (id) => {
@@ -83,10 +82,10 @@ display.addEventListener("click", (e) => {
 });
 
 // Adding data
-const addingData = async (doc) => {
-  const querySnapshot = await getDocs(collection(db, "menu"));
-  querySnapshot.forEach((doc) => {
-    display.innerHTML += `  <tr>
+let i = 1;
+
+const displayData = async (doc) => {
+  display.innerHTML += `  <tr>
     <th scope="row">${i++}</th>
     <td>${doc.data().img}</td>
     <td>${doc.data().title}</td>
@@ -97,5 +96,4 @@ const addingData = async (doc) => {
     }" class="btn btn-danger">Delete</button></td>
   </tr>
   `;
-  });
 };
