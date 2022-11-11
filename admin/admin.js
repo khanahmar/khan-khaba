@@ -4,12 +4,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebas
 import {
   getFirestore,
   collection,
-  getDocs,
+  getDoc,
   addDoc,
   doc,
   deleteDoc,
   onSnapshot,
   query,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -42,20 +43,20 @@ onSnapshot(q, (snapshot) => {
 });
 
 // Form to add item
+
 const form = document.getElementById("form");
+const img = document.getElementById("img-url");
+const title = document.getElementById("title");
+const desc = document.getElementById("desc");
+const price = document.getElementById("price");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const img = document.getElementById("img-url").value;
-  const title = document.getElementById("title").value;
-  const desc = document.getElementById("desc").value;
-  const price = document.getElementById("price").value;
-
   const pizza = {
-    img,
-    title,
-    desc,
-    price,
+    img: img.value,
+    title: title.value,
+    desc: desc.value,
+    price: price.value,
   };
   addData(pizza);
   form.reset();
@@ -99,7 +100,14 @@ const displayData = async (item) => {
   const upBtns = document.querySelectorAll(".update-btn");
   upBtns.forEach((btn) => {
     btn.addEventListener("click", async (e) => {
-      console.log(e.target.dataset.id);
+      await getDoc(doc(db, "menu", e.target.dataset.id))
+        .then((item) => {
+          img.value = item.data().img;
+          title.value = item.data().title;
+          desc.value = item.data().desc;
+          price.value = item.data().price;
+        })
+        .catch((err) => console.log(err));
     });
   });
 };
