@@ -49,6 +49,7 @@ const img = document.getElementById("img-url");
 const title = document.getElementById("title");
 const desc = document.getElementById("desc");
 const price = document.getElementById("price");
+const submitBtn = document.getElementById("submit");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -106,6 +107,8 @@ const displayData = async (item) => {
           title.value = item.data().title;
           desc.value = item.data().desc;
           price.value = item.data().price;
+          submitBtn.classList.add("btn-success");
+          submitBtn.innerHTML = "Update";
         })
         .catch((err) => console.log(err));
     });
