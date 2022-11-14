@@ -34,7 +34,7 @@ onSnapshot(q, (snapshot) => {
       displayData(change.doc);
     }
     if (change.type === "modified") {
-      console.log("Modified city: ", change.doc.data());
+      editItem(change.doc)
     }
     if (change.type === "removed") {
       delData(change.doc.id);
@@ -50,16 +50,22 @@ const title = document.getElementById("title");
 const desc = document.getElementById("desc");
 const price = document.getElementById("price");
 const submitBtn = document.getElementById("submit");
+const itemId = document.getElementById("item-id");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+  const id = itemId.value;
   const pizza = {
     img: img.value,
     title: title.value,
     desc: desc.value,
     price: price.value,
   };
-  addData(pizza);
+  if (id) {
+    updateData(id, pizza);
+  } else {
+    addData(pizza);
+  }
   form.reset();
 });
 
@@ -103,6 +109,7 @@ const displayData = async (item) => {
     btn.addEventListener("click", async (e) => {
       await getDoc(doc(db, "menu", e.target.dataset.id))
         .then((item) => {
+          itemId.value = item.id;
           img.value = item.data().img;
           title.value = item.data().title;
           desc.value = item.data().desc;
@@ -113,6 +120,13 @@ const displayData = async (item) => {
         .catch((err) => console.log(err));
     });
   });
+};
+
+// Updating Data
+const updateData = async (id, pizza) => {
+  await updateDoc(doc(db, "menu", id), pizza)
+    .then((item) => console.log(item))
+    .catch((err) => console.log(err));
 };
 
 const delData = (id) => {
