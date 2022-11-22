@@ -34,7 +34,7 @@ onSnapshot(q, (snapshot) => {
       displayData(change.doc);
     }
     if (change.type === "modified") {
-      editItem(change.doc)
+      editItem(change.doc);
     }
     if (change.type === "removed") {
       delData(change.doc.id);
@@ -129,11 +129,34 @@ const updateData = async (id, pizza) => {
     .catch((err) => console.log(err));
 };
 
+// Deleting data
 const delData = (id) => {
   const menuItems = document.querySelectorAll(".menu-item");
   menuItems.forEach((item) => {
     if (item.dataset.id === id) {
       item.remove();
+    }
+  });
+};
+
+const editItem = (item) => {
+  const menuItems = document.querySelectorAll(".menu-item");
+  menuItems.forEach((row) => {
+    if (row.dataset.id === item.id) {
+      display.innerHTML += `  <tr class="menu-item" data-id=${item.id}>
+      <th scope="row">${i++}</th>
+      <td>${item.data().img}</td>
+      <td>${item.data().title}</td>
+      <td>${item.data().desc}</td>
+      <td>${item.data().price}</td>
+      <td class="d-flex">
+      <button data-id=${item.id} class="btn btn-danger del-btn">Delete</button>
+      <button data-id=${
+        item.id
+      } class="btn btn-primary update-btn">Update</button>
+      </td>
+    </tr>
+    `;
     }
   });
 };
