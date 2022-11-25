@@ -1,0 +1,8 @@
+body {
+  counter-reset: section;
+}
+
+.serial::after {
+  counter-increment: section;
+  content: counter(section);
+}

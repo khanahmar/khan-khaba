@@ -43,7 +43,6 @@ onSnapshot(q, (snapshot) => {
 });
 
 // Form to add item
-
 const form = document.getElementById("form");
 const img = document.getElementById("img-url");
 const title = document.getElementById("title");
@@ -77,10 +76,9 @@ const addData = async (pizza) => {
 };
 
 // Display data
-let i = 1;
 const displayData = async (item) => {
   display.innerHTML += `  <tr class="menu-item" data-id=${item.id}>
-    <th scope="row">${i++}</th>
+    <th class="serial" scope="row"></th>
     <td>${item.data().img}</td>
     <td>${item.data().title}</td>
     <td>${item.data().desc}</td>
@@ -93,6 +91,7 @@ const displayData = async (item) => {
     </td>
   </tr>
   `;
+
   // Delete function
   const delBtns = document.querySelectorAll(".del-btn");
   delBtns.forEach((btn) => {
@@ -138,25 +137,17 @@ const delData = (id) => {
     }
   });
 };
-
+// Editing data
 const editItem = (item) => {
   const menuItems = document.querySelectorAll(".menu-item");
   menuItems.forEach((row) => {
     if (row.dataset.id === item.id) {
-      display.innerHTML += `  <tr class="menu-item" data-id=${item.id}>
-      <th scope="row">${i++}</th>
-      <td>${item.data().img}</td>
-      <td>${item.data().title}</td>
-      <td>${item.data().desc}</td>
-      <td>${item.data().price}</td>
-      <td class="d-flex">
-      <button data-id=${item.id} class="btn btn-danger del-btn">Delete</button>
-      <button data-id=${
-        item.id
-      } class="btn btn-primary update-btn">Update</button>
-      </td>
-    </tr>
-    `;
+      row.childNodes[3].childNodes[0].src = item.data().img;
+      row.childNodes[5].innerHTML = item.data().title;
+      row.childNodes[7].innerHTML = item.data().desc;
+      row.childNodes[9].innerHTML = item.data().price;
+      submitBtn.innerHTML = "Add pizza";
+      submitBtn.style.backgroundColor = "blue";
     }
   });
 };
